@@ -1,7 +1,14 @@
 package org.backend.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "mecanicos")
 public class Mecanico {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(length = 20, nullable = false)
     private String nombre;
 
     // CONSTRUCTORES ----------------------------------------------------------->

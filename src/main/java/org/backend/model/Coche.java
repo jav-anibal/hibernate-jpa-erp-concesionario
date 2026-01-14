@@ -1,5 +1,7 @@
 package org.backend.model;
 
+import jakarta.persistence.*;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -8,23 +10,44 @@ import java.util.Set;
 
 
 
-
+@Entity
+@Table(name = "coches")
 public class Coche {
-
-
+    @Id
+    @Column(length = 7, updatable = false) //-> la clave no puede cambiar una vez insertada
     private String matricula; // PK
+    @Column(length = 32, nullable = false)
     private String marca;
+    @Column(length = 32, nullable = false)
     private String modelo;
+    @Column
     private BigDecimal precioBase;
 
-    // R E L A C I O N E S ------------------------------------------------------>
-    // Un coche pertenece a un concesionario -> Relación N:1
+    // RELACIONES ------------------------------------------------------>
+    // Un coche pertenece a un concesionario
+    @ManyToOne //-> Relación N:1
+    @JoinColumn(name = "concesionario_id")
     private Concesionario concesionario; // Referencia -> FK
-    // Un coche puede tener muchos equipamientos -> Relación N:M
+    // Un coche puede tener muchos equipamientos
+
+    @ManyToMany//-> Relación N:M
+    @JoinTable(
+            name = "coche_equipamiento",
+            joinColumns = @JoinColumn(name = "coche_matricula"),
+            inverseJoinColumns = @JoinColumn(name = "equipamiento_id")
+    )//-> Representa la creación de una nueva tabla,
+    // ya que una relación muchos-a-muchos,
+    // las bases de datos relacionales
+    // no pueden representarse directamente
+    // con solo dos tablas (necesitan una tabla intermedia para unirlas)
     private Set<Equipamiento> equipamientos = new HashSet<>();
-    //Un coche puede ser reparado por muchos mecánicos -> Relación 1:N
+    //Un coche puede ser reparado por muchos mecánicos
+
+    @OneToMany(mappedBy = "coche") //-> Relación 1:N - mappedBY: apunta al atributo que tiene la FK
     private List<Reparacion> reparaciones = new ArrayList<>();
-    private Venta venta; // 1:1
+
+    @OneToOne(mappedBy = "coche") // -> 1:1
+    private Venta venta;
 
 
     // CONSTRUCTORES ----------------------------------------------------------->

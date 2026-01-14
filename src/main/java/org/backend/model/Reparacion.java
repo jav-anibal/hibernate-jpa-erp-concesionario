@@ -1,16 +1,29 @@
 package org.backend.model;
 
+import jakarta.persistence.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "reparaciones")
 public class Reparacion {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column
     private LocalDate fecha;
+    @Column
     private BigDecimal coste;
+    @Column(length = 255, nullable = false)
     private String descripcion;
 
     //RELACIONES
+    @ManyToOne
+    @JoinColumn(name = "coche_matricula", nullable = false)
     private Coche coche; // Muchos a uno -> N:1
+    @ManyToOne
+    @JoinColumn(name = "mecanico_id", nullable = false)
     private Mecanico mecanico; // Muchos a uno -> N:1
 
 
@@ -83,16 +96,6 @@ public class Reparacion {
         this.mecanico = mecanico;
     }
 
-    // TO - STRING() ----------------------------------------------------------->
 
-    @Override
-    public String toString() {
-        return "Reparación{" +
-                "fecha=" + fecha +
-                ", coste=" + coste +
-                ", descripcion='" + descripcion + '\'' +
-                ", mecanico=" + mecanico.getNombre() +
-                '}';
-    }
 
 }

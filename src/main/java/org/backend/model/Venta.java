@@ -1,16 +1,32 @@
 package org.backend.model;
 
+import jakarta.persistence.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+@Entity
+@Table(name="ventas")
 public class Venta {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column
     private LocalDate fecha;
+    @Column
     private BigDecimal precioFinal;
 
     //RELACIONES
+    @OneToOne
+    @JoinColumn(name = "coche_matricula")
     private Coche coche; // Uno a uno -> 1:1
+
+    @ManyToOne
+    @JoinColumn(name = "propietario_id", nullable = false)
     private Propietario propietario; // Muchos a uno -> N:1
+
+    @ManyToOne
+    @JoinColumn(name = "concesionario_id",nullable = false)
     private Concesionario concesionario; // Muchos a uno -> N:1
 
     // CONSTRUCTORES ----------------------------------------------------------->
@@ -80,18 +96,5 @@ public class Venta {
         this.concesionario = concesionario;
     }
 
-    // TO - STRING ----------------------------------------------------------->
 
-
-    @Override
-    public String toString() {
-        return "Venta{" +
-                "id=" + id +
-                ", fecha=" + fecha +
-                ", precioFinal=" + precioFinal +
-                ", coche=" + coche.getMatricula() + coche.getMarca() +
-                ", propietario=" + propietario.getNombre() +
-                ", concesionario=" + concesionario.getNombre() +
-                '}';
-    }
 }

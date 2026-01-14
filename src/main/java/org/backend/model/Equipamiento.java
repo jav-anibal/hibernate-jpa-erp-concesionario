@@ -1,10 +1,18 @@
 package org.backend.model;
 
+import jakarta.persistence.*;
+
 import java.math.BigDecimal;
 
+@Entity
+@Table(name = "equipamientos")
 public class Equipamiento {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(length = 40, nullable = false)
     private String nombre;
+    @Column
     private BigDecimal precioUnit;
 
 
