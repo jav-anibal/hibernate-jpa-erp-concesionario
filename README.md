@@ -15,7 +15,6 @@ ESTRUCTURA DEL PROYECTO
 src/
  └── org.backend
      ├── model        → Entidades JPA (Dominio)
-     ├── repository   → Lógica del negocio
      ├── service      → Gestión de EntityManager 
      └── Main.java    → Punto de entrada
 ```
