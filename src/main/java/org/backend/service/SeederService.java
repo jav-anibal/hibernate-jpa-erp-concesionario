@@ -4,9 +4,8 @@ import jakarta.persistence.EntityManager;
 import org.backend.model.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
-public class Seeder {
+public class SeederService {
 
     public static void seed() {
 

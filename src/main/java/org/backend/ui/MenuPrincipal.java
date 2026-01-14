@@ -1,7 +1,6 @@
 package org.backend.ui;
 
 import org.backend.service.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -13,7 +12,6 @@ import java.util.stream.IntStream;
 public class MenuPrincipal {
     private static final Scanner sc = new Scanner(System.in);
     private static int opcionElegida;
-
 
     //==========================================================
     // MENU PRINCIPAL
@@ -29,7 +27,6 @@ public class MenuPrincipal {
                 "Consultas e informes"
         );
 
-
         while (true) {
 
             System.out.println("\n=== MENU PRINCIPAL - RED CONCESIONARIO ===\n");
@@ -39,7 +36,6 @@ public class MenuPrincipal {
                     );
 
             System.out.println("0. SALIR");
-
 
             int opcion = leerOpcion(listMenuBase.size());
 
@@ -70,7 +66,6 @@ public class MenuPrincipal {
 
 
         }
-
     }
 
 
@@ -105,7 +100,7 @@ public class MenuPrincipal {
                     GestorEntityManager.iniciarConexion();
                 }
                 case 2 -> {
-                    Seeder.seed();
+                    SeederService.seed();
                 }
 
 
@@ -116,7 +111,6 @@ public class MenuPrincipal {
 
     }
 
-
     // -------------------------------------------------------------------------
     // CASE 2 -> GESTIÓN DE STOCK (ALTAS)
     public static void subMenuGestionStock() {
@@ -124,7 +118,6 @@ public class MenuPrincipal {
                 "Alta de Concesionario",
                 "Alta de Coche"
         );
-
 
         while (true) {
             System.out.println("\n=== GESTIÓN DE STOCK (ALTAS) ===\n");
@@ -147,13 +140,9 @@ public class MenuPrincipal {
                     pedirDatosParaAltaCoche();
 
                 }
-
-
             }
 
         }
-
-
     }
 
     // -------------------------------------------------------------------------
@@ -278,18 +267,14 @@ public class MenuPrincipal {
 
                 "Vender Coche"
         );
-
-
         while (true) {
 
             System.out.println("\n=== VENTAS ===\n");
-
             IntStream.range(0, listSubMenuVentas.size())
                     .forEach(i ->
                             System.out.println((i + 1) + ". " + listSubMenuVentas.get(i))
                     );
             System.out.println("0. VOLVER");
-
 
             int opt = leerOpcion(listSubMenuVentas.size());
 
@@ -301,13 +286,8 @@ public class MenuPrincipal {
                 case 1 -> {
                     pedirDatosParaVenderCoche();
                 }
-
-
             }
-
         }
-
-
     }
 
     //==========================================================
@@ -548,7 +528,6 @@ public class MenuPrincipal {
 
     private static void pedirDatosParaAltaConcesionario() {
         System.out.println("\n=== ALTA DE CONCESIONARIO ===\n");
-
         System.out.println("Nombre del Concesionario nuevo: ");
         String nuevoConcesionario = sc.nextLine().trim().toUpperCase();
 
@@ -560,8 +539,6 @@ public class MenuPrincipal {
         } catch (ApplicationException e) {
             System.err.println(e.getMessage());
         }
-
-
     }
 
 
@@ -573,7 +550,6 @@ public class MenuPrincipal {
     public static void pedirDatosParaAltaCoche() {
         System.out.println("\n=== ALTA DE COCHE ===\n");
 
-
         try {
 
             // 1. Pedir matrícula
@@ -581,7 +557,6 @@ public class MenuPrincipal {
 
             // Aqui llamamos a la clase VALIDATION
             String matricula = Validation.validarMatricula(sc.nextLine().trim());
-
 
             // 2. Pedir marca
             System.out.print("Marca: ");
@@ -598,7 +573,6 @@ public class MenuPrincipal {
             // 5. Pedir concesionario (esto es más complejo)
             System.out.print("ID del concesionario: ");
             Long idConcesionario = sc.nextLong();
-
 
             CocheService.insertarCoche(matricula, marca, modelo, precioBase, idConcesionario);
         } catch (ApplicationException e) {
