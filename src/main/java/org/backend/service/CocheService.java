@@ -34,10 +34,11 @@ public class CocheService {
             System.out.println(" HA -INSERTADO UN COCHE NUEVO ");
 
         } catch (Exception e) {
-            if(conexion.getTransaction().isActive()){
+            if (conexion.getTransaction().isActive()) {
                 conexion.getTransaction().rollback();
             }
-            throw new ApplicationException("Error an insert coche: " +e.getMessage(), e);
+            System.err.println("El matricula ya se encuentra en el sistema");
+            throw new ApplicationException("ERROR AL INSERTAR COCHE");
         }
 
 

@@ -1,8 +1,6 @@
 package org.backend.ui;
 
-import org.backend.service.CocheService;
-import org.backend.service.GestorEntityManager;
-import org.backend.service.Validation;
+import org.backend.service.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -102,11 +100,9 @@ public class MenuPrincipal {
                 }
                 case 1 -> {
                     GestorEntityManager.iniciarConexion();
-
                 }
                 case 2 -> {
-
-
+                    Seeder.seed();
                 }
 
 
@@ -122,7 +118,6 @@ public class MenuPrincipal {
     // CASE 2 -> GESTIÓN DE STOCK (ALTAS)
     public static void subMenuGestionStock() {
         List<String> listSubMenuGestionStock = List.of(
-
                 "Alta de Concesionario",
                 "Alta de Coche"
         );
@@ -143,9 +138,10 @@ public class MenuPrincipal {
                     return;
                 }
                 case 1 -> {
-                    GestorEntityManager.iniciarConexion();
+                    pedirDatosParaAltaConcesionario();
                 }
-                case 2 -> { pedirDatosParaAltaCoche();
+                case 2 -> {
+                    pedirDatosParaAltaCoche();
 
                 }
 
@@ -307,42 +303,69 @@ public class MenuPrincipal {
 
 
     //==========================================================
-    // PUNTO  - SOLICITAR DATOS PARA EL COCHE
+    // PUNTO 2.1 -> SOLICITAR DATOS PARA EL CONCESIONARIO
+    // ==========================================================
+
+    private static void pedirDatosParaAltaConcesionario() {
+        System.out.println("\n=== ALTA DE CONCESIONARIO ===\n");
+
+        System.out.println("Nombre del Concesionario nuevo: ");
+        String nuevoConcesionario = sc.nextLine().trim().toUpperCase();
+
+        System.out.println("Dirección del Concesionario nuevo: ");
+        String nuevaDireccion = sc.nextLine().trim().toUpperCase();
+
+        try {
+            ConcesionarioService.altaConcesionario(nuevoConcesionario, nuevaDireccion);
+        } catch (ApplicationException e) {
+            System.err.println(e.getMessage());
+        }
+
+
+    }
+
+
+    //==========================================================
+    // PUNTO 2.2 - SOLICITAR DATOS PARA EL COCHE
     // ==========================================================
 
 
     public static void pedirDatosParaAltaCoche() {
         System.out.println("\n=== ALTA DE COCHE ===\n");
 
-        // 1. Pedir matrícula
-        System.out.print("Matrícula (4 dígitos + 3 letras): ");
 
-       // Aqui llamamos a la clase VALIDATION
-        String matricula = Validation.validarMatricula(sc.nextLine().trim());
+        try {
+
+            // 1. Pedir matrícula
+            System.out.print(" Ingrese la matrícula : ");
+
+            // Aqui llamamos a la clase VALIDATION
+            String matricula = Validation.validarMatricula(sc.nextLine().trim());
 
 
-        // 2. Pedir marca
-        System.out.print("Marca: ");
-        String marca = sc.nextLine();
+            // 2. Pedir marca
+            System.out.print("Marca: ");
+            String marca = sc.nextLine();
 
-        // 3. Pedir modelo
-        System.out.print("Modelo: ");
-        String modelo = sc.nextLine();
+            // 3. Pedir modelo
+            System.out.print("Modelo: ");
+            String modelo = sc.nextLine();
 
-        // 4. Pedir precio
-        System.out.print("Precio base: ");
-        BigDecimal precioBase = new BigDecimal(sc.nextLine());
+            // 4. Pedir precio
+            System.out.print("Precio base: ");
+            BigDecimal precioBase = new BigDecimal(sc.nextLine());
 
-        // 5. Pedir concesionario (esto es más complejo)
-        System.out.print("ID del concesionario: ");
-        Long idConcesionario = sc.nextLong();
+            // 5. Pedir concesionario (esto es más complejo)
+            System.out.print("ID del concesionario: ");
+            Long idConcesionario = sc.nextLong();
 
-        CocheService.insertarCoche(matricula, marca , modelo, precioBase, idConcesionario);
+
+            CocheService.insertarCoche(matricula, marca, modelo, precioBase, idConcesionario);
+        } catch (ApplicationException e) {
+            System.err.println(e.getMessage());
+        }
 
     }
-
-
-
 
 
 }
