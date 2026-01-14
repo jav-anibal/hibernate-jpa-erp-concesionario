@@ -12,11 +12,11 @@ public class CocheService {
                                      String modelo, BigDecimal precioBase,
                                      Long idConcesionario) {
 
-
-        // Traemos la conexión -> //por completa esta información xq sigo estrucutrando
-        EntityManager conexion = GestorEntityManager.getEntityManager();
-
+        EntityManager conexion = null;
         try {
+            // Traemos la conexión -> //por completa esta información xq sigo estructurando
+            conexion = GestorEntityManager.getEntityManager();
+
             conexion.getTransaction().begin();
 
             //-> Necesitamos saber si idConcesionario existe
