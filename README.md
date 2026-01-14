@@ -1,6 +1,7 @@
 # RED - CONCESIONARIOS 
 
-Proyecto Java backend con JPA/Hibernate 
+Java backend con JPA/Hibernate 
+---
 
 Modela un sistema de concesionarios de coches. 
 Incluye diseño de dominio, relaciones entre entidades, persistencia con MySQL, 
