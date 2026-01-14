@@ -26,13 +26,18 @@ public class GestorEntityManager {
         }
     }
 
+    //=========================================================================================
+    // CONEXIÓN -> IMPORTANTE PARA TRABAJAR CON LOS MÉTODOS
     // VERSIÓN MANUAL: Requiere inicialización ELEGIR -> (opción 1.1)
-    public static EntityManager getEntityManager() {
+    public static EntityManager getEntityManager() throws ApplicationException {
         if (entityManager == null) {
-            throw new IllegalStateException("EntityManager no inicializado. Ejecuta primero la opción 1.1");
+            throw new ApplicationException("EntityManager no inicializado. Ejecuta primero la opción 1.1");
         }
         return entityManager;
     }
+    //=========================================================================================
+
+
 
     // VERSIÓN CON AUTO-INICIALIZACIÓN
     // public static EntityManager getEntityManager() {

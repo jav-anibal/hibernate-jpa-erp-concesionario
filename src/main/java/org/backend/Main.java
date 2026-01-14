@@ -1,12 +1,11 @@
 package org.backend;
 
-
-import org.backend.service.GestorEntityManager;
+import org.backend.ui.MenuPrincipal;
 
 public class Main {
     public static void main(String[] args) {
 
-        GestorEntityManager.iniciarConexion();
+        MenuPrincipal.mostrarMenu();
 
     }
 }
