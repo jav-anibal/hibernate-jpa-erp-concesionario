@@ -19,6 +19,7 @@ public class CocheService {
         EntityManager conexion = null;
         try {
             // Traemos la conexión -> NOS TRAEMOS LA CONEXIÓN - LA GUARDAMOS EN LA VARIABLE conexion
+            // La de conexión se establece en la inicialización del EntityManager - punto 1.1
             conexion = GestorEntityManager.getEntityManager();
 
             conexion.getTransaction().begin();
@@ -36,6 +37,7 @@ public class CocheService {
 
             conexion.getTransaction().commit(); // confirmamos cambios
             System.out.println(" HA -INSERTADO UN COCHE NUEVO ");
+            System.out.println("En el concesionario: " + nuevoCoche.getConcesionario());
 
         } catch (Exception e) {
             if (conexion.getTransaction().isActive()) {

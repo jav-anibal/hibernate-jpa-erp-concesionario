@@ -37,8 +37,8 @@ public class Coche {
     // no pueden representarse directamente
     // con solo dos tablas (necesitan una tabla intermedia para unirlas)
     private Set<Equipamiento> equipamientos = new HashSet<>();
-    //Un coche puede ser reparado por muchos mecánicos
 
+    //Un coche puede ser reparado por muchos mecánicos
     @OneToMany(mappedBy = "coche") //-> Relación 1:N - mappedBY: apunta al atributo que tiene la FK
     private List<Reparacion> reparaciones = new ArrayList<>();
 

@@ -13,6 +13,14 @@ public class SeederService {
             EntityManager em = GestorEntityManager.getEntityManager();
             em.getTransaction().begin();
 
+            // Borrar datos existentes
+            em.createQuery("DELETE FROM Venta").executeUpdate();
+            em.createQuery("DELETE FROM Coche").executeUpdate();
+            em.createQuery("DELETE FROM Equipamiento").executeUpdate();
+            em.createQuery("DELETE FROM Propietario").executeUpdate();
+            em.createQuery("DELETE FROM Mecanico").executeUpdate();
+            em.createQuery("DELETE FROM Concesionario").executeUpdate();
+
             // Creando concesionario
             Concesionario c1 = new Concesionario("AutosMiravent", "Avenida del Carnaval");
             em.persist(c1);
@@ -62,7 +70,7 @@ public class SeederService {
                 if (em.getTransaction().isActive()) {
                     em.getTransaction().rollback();
                 }
-            } catch (Exception ignored) {
+            } catch (Exception e) {
                 System.out.println("Error al persistir datos " + ex.getMessage());
             }
 

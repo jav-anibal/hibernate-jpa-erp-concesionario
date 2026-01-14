@@ -71,7 +71,10 @@ public class MenuPrincipal {
     }
 
 
+
+
     // TODOS -> SUB-MENU ------------------------------------------------------>
+
     // -------------------------------------------------------------------------
     // CASE 1
     public static void subMenuConfiguracion() {
@@ -148,6 +151,70 @@ public class MenuPrincipal {
     }
 
     // -------------------------------------------------------------------------
+
+    // ==========================================================
+    // PUNTO 2.1 -> SOLICITAR DATOS PARA EL CONCESIONARIO
+    // ==========================================================
+
+    private static void pedirDatosParaAltaConcesionario() {
+        System.out.println("\n=== ALTA DE CONCESIONARIO ===\n");
+        System.out.println("Nombre del Concesionario nuevo: ");
+        String nuevoConcesionario = sc.nextLine().trim().toUpperCase();
+
+        System.out.println("Dirección del Concesionario nuevo: ");
+        String nuevaDireccion = sc.nextLine().trim().toUpperCase();
+
+        try {
+            ConcesionarioService.altaConcesionario(nuevoConcesionario, nuevaDireccion);
+        } catch (ApplicationException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+
+    // ==========================================================
+    // PUNTO 2.2 - SOLICITAR DATOS PARA EL COCHE
+    // ==========================================================
+
+
+    public static void pedirDatosParaAltaCoche() {
+        System.out.println("\n=== ALTA DE COCHE ===\n");
+
+        try {
+
+            // 1. Pedir matrícula
+            System.out.print("Ingrese la matrícula : ");
+
+            // Aqui llamamos a la clase VALIDATION
+            String matricula = Validation.validarMatricula(sc.nextLine().trim());
+
+            // 2. Pedir marca
+            System.out.print("Marca: ");
+            String marca = sc.nextLine();
+
+            // 3. Pedir modelo
+            System.out.print("Modelo: ");
+            String modelo = sc.nextLine();
+
+            // 4. Pedir precio
+            System.out.print("Precio base: ");
+            BigDecimal precioBase = new BigDecimal(sc.nextLine());
+
+            // 5. Pedir concesionario (esto es más complejo)
+            System.out.print("ID del concesionario: ");
+            Long idConcesionario = sc.nextLong();
+
+            CocheService.insertarCoche(matricula, marca, modelo, precioBase, idConcesionario);
+        } catch (ApplicationException e) {
+            System.err.println(e.getMessage());
+
+        }
+
+    }
+
+
+
+
     // CASE 3
     public static void subMenuTaller() {
         List<String> listSubMenuTaller = List.of(
@@ -190,7 +257,7 @@ public class MenuPrincipal {
 
     }
 
-    //==========================================================
+    // ==========================================================
     // PUNTO 3.1 -> SOLICITAR DATOS PARA INSTALAR EXTRA
     // ==========================================================
 
@@ -205,7 +272,7 @@ public class MenuPrincipal {
             // 2. Pedir ID equipamiento
             System.out.print("ID del equipamiento a instalar: ");
             Long idEquipamiento = sc.nextLong();
-            sc.nextLine(); // Consumir \n residual
+            sc.nextLine();
 
             // 3. Llamar al servicio
             BigDecimal precioTotal = CocheService.instalarExtra(matricula, idEquipamiento);
@@ -218,7 +285,7 @@ public class MenuPrincipal {
         }
     }
 
-    //==========================================================
+    // ==========================================================
     // PUNTO 3.2 -> SOLICITAR DATOS PARA REGISTRAR REPARACIÓN
     // ==========================================================
 
@@ -233,7 +300,7 @@ public class MenuPrincipal {
             // 2. Pedir ID mecánico
             System.out.print("ID del mecánico: ");
             Long idMecanico = sc.nextLong();
-            sc.nextLine(); // Consumir \n residual
+            sc.nextLine();
 
             // 3. Pedir fecha (formato dd/MM/yyyy)
             System.out.print("Fecha de la reparación (dd/MM/yyyy): ");
@@ -292,7 +359,7 @@ public class MenuPrincipal {
         }
     }
 
-    //==========================================================
+    // ==========================================================
     // PUNTO 4.1 -> SOLICITAR DATOS PARA VENDER COCHE
     // ==========================================================
 
@@ -314,7 +381,7 @@ public class MenuPrincipal {
             // 3. Pedir ID del concesionario que vende
             System.out.print("ID del concesionario que realiza la venta: ");
             Long idConcesionario = sc.nextLong();
-            sc.nextLine(); // Consumir \n residual
+            sc.nextLine();
 
             // 4. Pedir precio final pactado
             System.out.print("Precio final pactado: ");
@@ -329,7 +396,7 @@ public class MenuPrincipal {
     }
 
     // -------------------------------------------------------------------------
-    //CASE 5
+    // CASE 5
     public static void subMenuConsultas() {
         List<String> listSubMenuConsultas = List.of(
 
@@ -509,7 +576,7 @@ public class MenuPrincipal {
             System.out.println("  ==> Elija opción: ");
             if (sc.hasNextInt()) {
                 opcionElegida = sc.nextInt();
-                sc.nextLine();  // <-- Consumir el \n residual
+                sc.nextLine();
                 if (opcionElegida >= 0 && opcionElegida <= max) {
                     return opcionElegida;
                 } else {
@@ -524,64 +591,6 @@ public class MenuPrincipal {
     }
 
 
-    //==========================================================
-    // PUNTO 2.1 -> SOLICITAR DATOS PARA EL CONCESIONARIO
-    // ==========================================================
-
-    private static void pedirDatosParaAltaConcesionario() {
-        System.out.println("\n=== ALTA DE CONCESIONARIO ===\n");
-        System.out.println("Nombre del Concesionario nuevo: ");
-        String nuevoConcesionario = sc.nextLine().trim().toUpperCase();
-
-        System.out.println("Dirección del Concesionario nuevo: ");
-        String nuevaDireccion = sc.nextLine().trim().toUpperCase();
-
-        try {
-            ConcesionarioService.altaConcesionario(nuevoConcesionario, nuevaDireccion);
-        } catch (ApplicationException e) {
-            System.err.println(e.getMessage());
-        }
-    }
-
-
-    //==========================================================
-    // PUNTO 2.2 - SOLICITAR DATOS PARA EL COCHE
-    // ==========================================================
-
-
-    public static void pedirDatosParaAltaCoche() {
-        System.out.println("\n=== ALTA DE COCHE ===\n");
-
-        try {
-
-            // 1. Pedir matrícula
-            System.out.print(" Ingrese la matrícula : ");
-
-            // Aqui llamamos a la clase VALIDATION
-            String matricula = Validation.validarMatricula(sc.nextLine().trim());
-
-            // 2. Pedir marca
-            System.out.print("Marca: ");
-            String marca = sc.nextLine();
-
-            // 3. Pedir modelo
-            System.out.print("Modelo: ");
-            String modelo = sc.nextLine();
-
-            // 4. Pedir precio
-            System.out.print("Precio base: ");
-            BigDecimal precioBase = new BigDecimal(sc.nextLine());
-
-            // 5. Pedir concesionario (esto es más complejo)
-            System.out.print("ID del concesionario: ");
-            Long idConcesionario = sc.nextLong();
-
-            CocheService.insertarCoche(matricula, marca, modelo, precioBase, idConcesionario);
-        } catch (ApplicationException e) {
-            System.err.println(e.getMessage());
-        }
-
-    }
 
 
 }

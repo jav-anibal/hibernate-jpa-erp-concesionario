@@ -18,6 +18,7 @@ public class ConcesionarioService {
 
             conexion.getTransaction().commit();
             System.out.println("Se ha dado de alta un nuevo concesionario");
+            System.out.println("Concesionario: ID: " + nuevoConcesionario.getId());
 
         } catch (Exception e) {
 

@@ -39,15 +39,6 @@ public class GestorEntityManager {
 
 
 
-    // VERSIÓN CON AUTO-INICIALIZACIÓN
-    // public static EntityManager getEntityManager() {
-    //     if (entityManager == null) {
-    //         System.out.println("EntityManager MODO -> Auto-inicializando...");
-    //         iniciarConexion();
-    //     }
-    //     return entityManager;
-    // }
-
     public static void cerrarConexion() {
         if (entityManager != null && entityManager.isOpen()) {
             entityManager.close();
