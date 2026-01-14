@@ -18,7 +18,7 @@ public class CocheService {
 
         EntityManager conexion = null;
         try {
-            // Traemos la conexión -> //por completa esta información xq sigo estructurando
+            // Traemos la conexión -> NOS TRAEMOS LA CONEXIÓN - LA GUARDAMOS EN LA VARIABLE conexion
             conexion = GestorEntityManager.getEntityManager();
 
             conexion.getTransaction().begin();

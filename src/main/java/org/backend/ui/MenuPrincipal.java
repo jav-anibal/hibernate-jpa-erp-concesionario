@@ -42,6 +42,8 @@ public class MenuPrincipal {
             switch (opcion) {
 
                 case 0 -> {
+                    System.out.println("Cerrando conexión del sistema...");
+                    GestorEntityManager.cerrarConexion();
                     System.out.println("Saliendo del sistema...");
                     System.exit(0);
                 }
