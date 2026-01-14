@@ -2,6 +2,8 @@ package org.backend.model;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "propietarios")
 public class Propietario {
@@ -53,5 +55,19 @@ public class Propietario {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    // EQUALS & HASHCODE ----------------------------------------------------------->
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Propietario that)) return false;
+        return Objects.equals(dni, that.dni);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(dni);
     }
 }
