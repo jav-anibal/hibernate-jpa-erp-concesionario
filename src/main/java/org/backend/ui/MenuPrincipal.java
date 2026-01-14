@@ -3,6 +3,9 @@ package org.backend.ui;
 import org.backend.service.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.IntStream;
@@ -182,8 +185,10 @@ public class MenuPrincipal {
                     return;
                 }
                 case 1 -> {
+                    pedirDatosParaInstalarExtra();
                 }
                 case 2 -> {
+                    pedirDatosParaRegistrarReparacion();
                 }
 
 
@@ -192,6 +197,78 @@ public class MenuPrincipal {
         }
 
 
+    }
+
+    //==========================================================
+    // PUNTO 3.1 -> SOLICITAR DATOS PARA INSTALAR EXTRA
+    // ==========================================================
+
+    private static void pedirDatosParaInstalarExtra() {
+        System.out.println("\n=== INSTALAR EXTRA ===\n");
+
+        try {
+            // 1. Pedir matrícula
+            System.out.print("Ingrese la matrícula del coche: ");
+            String matricula = Validation.validarMatricula(sc.nextLine().trim());
+
+            // 2. Pedir ID equipamiento
+            System.out.print("ID del equipamiento a instalar: ");
+            Long idEquipamiento = sc.nextLong();
+            sc.nextLine(); // Consumir \n residual
+
+            // 3. Llamar al servicio
+            BigDecimal precioTotal = CocheService.instalarExtra(matricula, idEquipamiento);
+
+            // 4. Mostrar nuevo precio total
+            System.out.println("\n>> PRECIO TOTAL DEL COCHE (Base + Extras): " + precioTotal + " €");
+
+        } catch (ApplicationException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    //==========================================================
+    // PUNTO 3.2 -> SOLICITAR DATOS PARA REGISTRAR REPARACIÓN
+    // ==========================================================
+
+    private static void pedirDatosParaRegistrarReparacion() {
+        System.out.println("\n=== REGISTRAR REPARACIÓN ===\n");
+
+        try {
+            // 1. Pedir matrícula
+            System.out.print("Ingrese la matrícula del coche: ");
+            String matricula = Validation.validarMatricula(sc.nextLine().trim());
+
+            // 2. Pedir ID mecánico
+            System.out.print("ID del mecánico: ");
+            Long idMecanico = sc.nextLong();
+            sc.nextLine(); // Consumir \n residual
+
+            // 3. Pedir fecha (formato dd/MM/yyyy)
+            System.out.print("Fecha de la reparación (dd/MM/yyyy): ");
+            String fechaStr = sc.nextLine().trim();
+            LocalDate fecha;
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                fecha = LocalDate.parse(fechaStr, formatter);
+            } catch (DateTimeParseException e) {
+                throw new ApplicationException("Formato de fecha inválido. Use dd/MM/yyyy");
+            }
+
+            // 4. Pedir coste
+            System.out.print("Coste de la intervención: ");
+            BigDecimal coste = new BigDecimal(sc.nextLine().trim());
+
+            // 5. Pedir descripción
+            System.out.print("Descripción breve: ");
+            String descripcion = sc.nextLine().trim();
+
+            // 6. Llamar al servicio
+            CocheService.registrarReparacion(matricula, idMecanico, fecha, coste, descripcion);
+
+        } catch (ApplicationException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     // -------------------------------------------------------------------------
@@ -222,6 +299,7 @@ public class MenuPrincipal {
                     return;
                 }
                 case 1 -> {
+                    pedirDatosParaVenderCoche();
                 }
 
 
@@ -230,6 +308,42 @@ public class MenuPrincipal {
         }
 
 
+    }
+
+    //==========================================================
+    // PUNTO 4.1 -> SOLICITAR DATOS PARA VENDER COCHE
+    // ==========================================================
+
+    private static void pedirDatosParaVenderCoche() {
+        System.out.println("\n=== VENDER COCHE ===\n");
+
+        try {
+            // 1. Pedir datos del nuevo propietario
+            System.out.print("DNI del comprador: ");
+            String dni = Validation.validarDni(sc.nextLine().trim());
+
+            System.out.print("Nombre del comprador: ");
+            String nombrePropietario = sc.nextLine().trim();
+
+            // 2. Pedir matrícula del coche
+            System.out.print("Matrícula del coche a vender: ");
+            String matricula = Validation.validarMatricula(sc.nextLine().trim());
+
+            // 3. Pedir ID del concesionario que vende
+            System.out.print("ID del concesionario que realiza la venta: ");
+            Long idConcesionario = sc.nextLong();
+            sc.nextLine(); // Consumir \n residual
+
+            // 4. Pedir precio final pactado
+            System.out.print("Precio final pactado: ");
+            BigDecimal precioFinal = new BigDecimal(sc.nextLine().trim());
+
+            // 5. Llamar al servicio
+            VentaService.venderCoche(dni, nombrePropietario, matricula, idConcesionario, precioFinal);
+
+        } catch (ApplicationException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     // -------------------------------------------------------------------------
@@ -262,10 +376,10 @@ public class MenuPrincipal {
                 case 0 -> {
                     return;
                 }
-                case 1 -> System.out.println("Consultando stock de concesionario...");
-                case 2 -> System.out.println("Consultando historial de mecánico...");
-                case 3 -> System.out.println("Consultando ventas por concesionario...");
-                case 4 -> System.out.println("Calculando coste actual de coche...");
+                case 1 -> consultarStockConcesionario();
+                case 2 -> consultarHistorialMecanico();
+                case 3 -> consultarVentasPorConcesionario();
+                case 4 -> consultarCosteActualCoche();
 
 
             }
@@ -273,6 +387,132 @@ public class MenuPrincipal {
         }
 
 
+    }
+
+    //==========================================================
+    // PUNTO 5.1 -> STOCK DE CONCESIONARIO
+    // ==========================================================
+
+    private static void consultarStockConcesionario() {
+        System.out.println("\n=== STOCK DE CONCESIONARIO ===\n");
+
+        try {
+            System.out.print("ID del concesionario: ");
+            Long idConcesionario = sc.nextLong();
+            sc.nextLine();
+
+            var coches = ConsultaService.stockDeConcesionario(idConcesionario);
+
+            if (coches.isEmpty()) {
+                System.out.println("No hay coches disponibles en este concesionario.");
+            } else {
+                System.out.println("\n>> Coches en stock (no vendidos):");
+                System.out.println("-".repeat(50));
+                for (var coche : coches) {
+                    System.out.println("  Matrícula: " + coche.getMatricula() +
+                            " | " + coche.getMarca() + " " + coche.getModelo() +
+                            " | Precio: " + coche.getPrecioBase() + " €");
+                }
+                System.out.println("-".repeat(50));
+                System.out.println("Total: " + coches.size() + " coche(s)");
+            }
+
+        } catch (ApplicationException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    //==========================================================
+    // PUNTO 5.2 -> HISTORIAL DE MECÁNICO
+    // ==========================================================
+
+    private static void consultarHistorialMecanico() {
+        System.out.println("\n=== HISTORIAL DE MECÁNICO ===\n");
+
+        try {
+            System.out.print("ID del mecánico: ");
+            Long idMecanico = sc.nextLong();
+            sc.nextLine();
+
+            var reparaciones = ConsultaService.historialDeMecanico(idMecanico);
+
+            if (reparaciones.isEmpty()) {
+                System.out.println("Este mecánico no tiene reparaciones registradas.");
+            } else {
+                System.out.println("\n>> Reparaciones realizadas:");
+                System.out.println("-".repeat(60));
+                for (var rep : reparaciones) {
+                    System.out.println("  Fecha: " + rep.getFecha() +
+                            " | Matrícula: " + rep.getCoche().getMatricula() +
+                            " | Coste: " + rep.getCoste() + " €");
+                    System.out.println("    Descripción: " + rep.getDescripcion());
+                }
+                System.out.println("-".repeat(60));
+                System.out.println("Total: " + reparaciones.size() + " reparación(es)");
+            }
+
+        } catch (ApplicationException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    //==========================================================
+    // PUNTO 5.3 -> VENTAS POR CONCESIONARIO
+    // ==========================================================
+
+    private static void consultarVentasPorConcesionario() {
+        System.out.println("\n=== VENTAS POR CONCESIONARIO ===\n");
+
+        try {
+            System.out.print("ID del concesionario: ");
+            Long idConcesionario = sc.nextLong();
+            sc.nextLine();
+
+            var ventas = ConsultaService.ventasPorConcesionario(idConcesionario);
+            var totalRecaudado = ConsultaService.totalRecaudadoPorConcesionario(idConcesionario);
+
+            if (ventas.isEmpty()) {
+                System.out.println("Este concesionario no tiene ventas registradas.");
+            } else {
+                System.out.println("\n>> Ventas realizadas:");
+                System.out.println("-".repeat(70));
+                for (var venta : ventas) {
+                    System.out.println("  Fecha: " + venta.getFecha() +
+                            " | Coche: " + venta.getCoche().getMatricula() +
+                            " | Comprador: " + venta.getPropietario().getNombre() +
+                            " | Precio: " + venta.getPrecioFinal() + " €");
+                }
+                System.out.println("-".repeat(70));
+                System.out.println("Total ventas: " + ventas.size());
+                System.out.println("IMPORTE TOTAL RECAUDADO: " + totalRecaudado + " €");
+            }
+
+        } catch (ApplicationException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    //==========================================================
+    // PUNTO 5.4 -> COSTE ACTUAL DE COCHE
+    // ==========================================================
+
+    private static void consultarCosteActualCoche() {
+        System.out.println("\n=== COSTE ACTUAL DE COCHE ===\n");
+
+        try {
+            System.out.print("Matrícula del coche: ");
+            String matricula = Validation.validarMatricula(sc.nextLine().trim());
+
+            BigDecimal costeTotal = ConsultaService.costeActualDeCoche(matricula);
+
+            System.out.println("\n>> COSTE TOTAL INVERTIDO EN EL COCHE " + matricula + ":");
+            System.out.println("   (Precio compra + Reparaciones + Extras)");
+            System.out.println("-".repeat(40));
+            System.out.println("   TOTAL: " + costeTotal + " €");
+
+        } catch (ApplicationException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     // -------------------------------------------------------------------------
