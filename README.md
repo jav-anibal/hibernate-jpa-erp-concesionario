@@ -30,6 +30,7 @@ Aplicación de consola que modela un sistema ERP para concesionarios de vehícul
 ## Estructura del Proyecto
 
 ```
+<<<<<<< HEAD
 src/main/java/org/backend/
 ├── Main.java                      # Punto de entrada
 ├── model/                         # Entidades JPA
@@ -54,6 +55,13 @@ src/main/java/org/backend/
 
 src/main/resources/META-INF/
 └── persistence.xml                # Configuración JPA/Hibernate
+=======
+src/
+ └── org.backend
+     ├── model        → Entidades JPA (Dominio)
+     ├── service      → Gestión de EntityManager 
+     └── Main.java    → Punto de entrada
+>>>>>>> c92dfa365bfca3d2da6706294ccfeaa33ef1d977
 ```
 
 ---
